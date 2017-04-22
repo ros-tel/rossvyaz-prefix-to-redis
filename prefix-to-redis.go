@@ -22,7 +22,7 @@ var (
 	redisHost = flag.String("redis_host", "127.0.0.1", "-redis_host=127.0.0.1")
 	redisPort = flag.String("redis_port", "6379", "-redis_port=6379")
 	redisAuth = flag.String("redis_auth", "", "-redis_auth=MyPasswd")
-	debug     = flag.Bool("debug", false, "-debug true")
+	debug     = flag.Bool("debug", false, "-debug")
 )
 
 func main() {
