@@ -1,37 +1,18 @@
 package main
 
-/*
-# data source
-wget https://www.rossvyaz.ru/docs/articles/Kody_ABC-3kh.csv
-wget https://www.rossvyaz.ru/docs/articles/Kody_ABC-4kh.csv
-wget https://www.rossvyaz.ru/docs/articles/Kody_ABC-8kh.csv
-wget https://www.rossvyaz.ru/docs/articles/Kody_DEF-9kh.csv
-
-# for test
-tail -n+2 Kody_DEF-9kh.csv | \
-head | \
-iconv -f cp1251 -t utf8 | \
-rossvyaz-to-prefix -debug
-
-# full load
-tail -n+2 Kody_DEF-9kh.csv | \
-iconv -f cp1251 -t utf8 | \
-rossvyaz-to-prefix
-*/
-
 import (
 	"encoding/csv"
+	"flag"
 	"io"
 	"log"
 	"math"
 	"net/http"
-	"strconv"
-
-	"flag"
-	"github.com/garyburd/redigo/redis"
 	"os"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/garyburd/redigo/redis"
 )
 
 var (
