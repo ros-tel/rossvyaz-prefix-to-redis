@@ -1,7 +1,8 @@
 # rossvyaz-prefix-to-redis
+---------------------------
 Loading prefixes of telecom operators in Radis according to rossvyaz.ru
 
-### get data
+### Obtaining data from the site [www.rossvyaz.ru](https://www.rossvyaz.ru)
 ```
 wget https://www.rossvyaz.ru/docs/articles/Kody_ABC-3kh.csv
 wget https://www.rossvyaz.ru/docs/articles/Kody_ABC-4kh.csv
@@ -9,7 +10,27 @@ wget https://www.rossvyaz.ru/docs/articles/Kody_ABC-8kh.csv
 wget https://www.rossvyaz.ru/docs/articles/Kody_DEF-9kh.csv
 ```
 
-### for test
+### List of telecom operators
+```
+cat Kody_DEF-9kh.csv | \
+iconv -f cp1251 -t utf8 | \
+awk -F ";" '{print $5}' | \
+sed 's#\t##g' | \
+sort | \
+uniq
+```
+
+### List of regions
+```
+cat Kody_DEF-9kh.csv | \
+iconv -f cp1251 -t utf8 | \
+awk -F ";" '{print $6}' | \
+sed 's#\t##g' | \
+sort | \
+uniq
+```
+
+### Load testing
 ```
 tail -n+2 Kody_DEF-9kh.csv | \
 head | \
@@ -17,14 +38,20 @@ iconv -f cp1251 -t utf8 | \
 rossvyaz-to-prefix -debug
 ```
 
-### full load
+### Full data upload
+For complete cleaning, you can add the **-flushall** parametr when loading the first file.
 ```
 tail -n+2 Kody_DEF-9kh.csv | \
 iconv -f cp1251 -t utf8 | \
+rossvyaz-to-prefix -flushall
+
+tail -n+2 Kody_ABC-3kh.csv | \
+iconv -f cp1251 -t utf8 | \
 rossvyaz-to-prefix
+...
 ```
 
-### view
+### Preview of prefixes
 ```
 redis-cli
 > KEYS 79001*
@@ -45,7 +72,11 @@ redis-cli
 15) "790012"
 16) "790019"
 17) "7900191"
+```
 
+##### An example of a search query with a sort by the longest match length with the prefix
+```
+redis-cli
 > MGET 79001812345 7900181234 790018123 79001812 7900181 790018 79001 7900
 1) (nil)
 2) (nil)

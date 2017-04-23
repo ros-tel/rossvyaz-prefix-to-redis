@@ -22,6 +22,7 @@ var (
 	redisHost = flag.String("redis_host", "127.0.0.1", "-redis_host=127.0.0.1")
 	redisPort = flag.String("redis_port", "6379", "-redis_port=6379")
 	redisAuth = flag.String("redis_auth", "", "-redis_auth=MyPasswd")
+	flushall  = flag.Bool("flushall", false, "-flushall")
 	debug     = flag.Bool("debug", false, "-debug")
 )
 
@@ -44,9 +45,11 @@ func main() {
 	rcsv.Comment = '#'
 	rcsv.LazyQuotes = true
 
-	_, err = redispool.Do("FLUSHALL")
-	if err != nil {
-		logStderr.Fatal(err)
+	if *flushall {
+		_, err = redispool.Do("FLUSHALL")
+		if err != nil {
+			logStderr.Fatal(err)
+		}
 	}
 
 	for {
